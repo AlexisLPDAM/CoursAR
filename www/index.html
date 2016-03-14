@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <title>Une application RA</title>
+    <title></title>
 
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
@@ -17,13 +17,32 @@
 
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
-
+	<script type="text/javascript" src="lib/3D/cv.js"></script>
+    <script type="text/javascript" src="lib/3D/aruco.js"></script>
+    <script type="text/javascript" src="lib/3D/svd.js"></script>
+    <script type="text/javascript" src="lib/3D/posit1.js"></script>
+    <script type="text/javascript" src="lib/3D/compatibility.js"></script>
+    <script type="text/javascript" src="lib/3D/profiler.js"></script>
+    <script type="text/javascript" src="lib/3D/three72.js"></script>
     <!-- your app's js -->
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
+	<script src="js/service.js"></script>
+	<script src="js/ng-cordova.min.js"></script>
   </head>
 
   <body ng-app="starter">
-    <ion-nav-view></ion-nav-view>
+	</ion-header-bar>
+	<ion-content ng-controller="AppCtrl" padding="true">
+	<button class="button button-full button-assertive" ng-click="takePhoto()">
+	Take Photo
+	</button>
+	<button class="button button-full button-assertive" ng-click="choosePhoto()">
+	Choose Photo
+	</button>
+<img ng-show="imgURI !== undefined" ng-src="{{imgURI}}" style="text-align: center">
+</ion-content>
+	
+	
   </body>
 </html>

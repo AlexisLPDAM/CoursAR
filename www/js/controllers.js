@@ -1,6 +1,25 @@
-angular.module('starter.controllers', [])
+angular.module('starter', ['ionic', 'ngCordova'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+module.factory('Camera', ['$q', function($q) {
+
+  return {
+    getPicture: function(options) {
+      var q = $q.defer();
+
+      navigator.camera.getPicture(function(result) {
+        // Do any magic you need
+        q.resolve(result);
+      }, function(err) {
+        q.reject(err);
+      }, options);
+
+      return q.promise;
+    }
+  }
+}]);
+
+
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $cordovaCamera) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -8,7 +27,45 @@ angular.module('starter.controllers', [])
   // listen for the $ionicView.enter event:
   //$scope.$on('$ionicView.enter', function(e) {
   //});
+	$scope.takePhoto = function () {
+                  var options = {
+                    quality: 75,
+                    destinationType: Camera.DestinationType.DATA_URL,
+                    sourceType: Camera.PictureSourceType.CAMERA,
+                    allowEdit: true,
+                    encodingType: Camera.EncodingType.JPEG,
+                    targetWidth: 300,
+                    targetHeight: 300,
+                    popoverOptions: CameraPopoverOptions,
+                    saveToPhotoAlbum: false
+                };
+   
+                    $cordovaCamera.getPicture(options).then(function (imageData) {
+                        $scope.imgURI = "data:image/jpeg;base64," + imageData;
+                    }, function (err) {
+                        // An error occured. Show a message to the user
+                    });
+                }
+                
+	$scope.choosePhoto = function () {
+	  var options = {
+		quality: 75,
+		destinationType: Camera.DestinationType.DATA_URL,
+		sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+		allowEdit: true,
+		encodingType: Camera.EncodingType.JPEG,
+		targetWidth: 300,
+		targetHeight: 300,
+		popoverOptions: CameraPopoverOptions,
+		saveToPhotoAlbum: false
+	};
 
+		$cordovaCamera.getPicture(options).then(function (imageData) {
+			$scope.imgURI = "data:image/jpeg;base64," + imageData;
+		}, function (err) {
+			// An error occured. Show a message to the user
+		});
+	}
   // Form data for the login modal
   $scope.loginData = {};
 
@@ -39,6 +96,8 @@ angular.module('starter.controllers', [])
       $scope.closeLogin();
     }, 1000);
   };
+  
+  
 })
 
 .controller('PlaylistsCtrl', function($scope) {
@@ -54,3 +113,12 @@ angular.module('starter.controllers', [])
 
 .controller('PlaylistCtrl', function($scope, $stateParams) {
 });
+
+
+
+
+
+
+
+
+
